@@ -10,33 +10,16 @@ public class Main {
     private static String user = "root";
     private static String pass = "root02";
     private static TreeMap<String, Book> books = new TreeMap<>();
-    private static JFrame frame;
+    static String authorName = "";
+    static int pubYear = 0;
 
     public static void main(String[] args) {
+        doVisible();
         try {
-            ResultSet resultSet = getBooksFromDB();
-            doVisible();
-            MainForm mF = new MainForm();
-            String bookName = mF.getBookName().getText();
-            CachedRowSet cachedRowSet = (CachedRowSet) resultSet;
-            cachedRowSet.setUrl(url);
-            cachedRowSet.setUsername(user);
-            cachedRowSet.setPassword(pass);
-            cachedRowSet.setCommand("SELECT * FROM Books WHERE name = ?");
-            cachedRowSet.setString(1, bookName);
-            cachedRowSet.execute();
-            String authorName = "";
-            int pubYear = 0;
-            while(cachedRowSet.next()){
-                authorName = cachedRowSet.getString("author");
-                pubYear = cachedRowSet.getInt("publishing_year");
-            }
-           // pubYear.toString();
-           // mF.pressButton(authorName);
+            getBooksFromDB();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private static ResultSet getBooksFromDB() throws SQLException {
@@ -61,7 +44,6 @@ public class Main {
                 books.put(bookName, book);
             }
             RowSetFactory factory = RowSetProvider.newFactory();
-
             return factory.createCachedRowSet();
         }
     }
@@ -74,5 +56,41 @@ public class Main {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    static void getResponseFromDB(String bookName){
+        try {
+            ResultSet resultSet = getBooksFromDB();
+            CachedRowSet cachedRowSet = (CachedRowSet) resultSet;
+            cachedRowSet.setUrl(url);
+            cachedRowSet.setUsername(user);
+            cachedRowSet.setPassword(pass);
+            cachedRowSet.setCommand("SELECT * FROM Books WHERE name = ?");
+            cachedRowSet.setString(1, bookName);
+            cachedRowSet.execute();
+            if (cachedRowSet.next()) {
+                authorName = cachedRowSet.getString("author");
+                pubYear = cachedRowSet.getInt("publishing_year");
+            }
+            else{
+                authorName = "Not found";
+                pubYear = -1;
+            }
+            cachedRowSet.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void booksFind(String bookName){
+        if(books.containsKey(bookName)){
+            Book book = books.get(bookName);
+            authorName = book.getAuthor();
+            pubYear = book.getPublishingYear();
+        }
+        else{
+            authorName = "Not found";
+            pubYear = 0;
+        }
     }
 }
