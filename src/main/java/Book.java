@@ -5,31 +5,31 @@ public class Book
     private String author;
     private int publishingYear;
 
-    public int getId() {
+    int getId() {
         return id;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
-    public String getAuthor() {
+    String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    void setAuthor(String author) {
         this.author = author;
     }
 
-    public int getPublishingYear() {
+    int getPublishingYear() {
         return publishingYear;
     }
 
-    public void setPublishingYear(int publishingYear) {
+    void setPublishingYear(int publishingYear) {
         this.publishingYear = publishingYear;
     }
 }

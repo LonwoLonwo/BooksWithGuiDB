@@ -12,7 +12,7 @@ public class MainForm {
     private JLabel pubYearOut;
     private JButton findButton;
 
-    public MainForm(){
+    MainForm(){
         buttonCheck.addActionListener(new Action() {
             @Override
             public Object getValue(String key) {
